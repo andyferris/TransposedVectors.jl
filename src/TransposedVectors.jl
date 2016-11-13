@@ -1,5 +1,11 @@
 module TransposedVectors
 
-# package code goes here
+import Base: transpose, ctranspose, conj, size, length
+
+import Base: @propagate_inbounds
+
+export TransposedVector
+
+include("TransposedVector.jl")
 
 end # module
