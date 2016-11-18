@@ -1,5 +1,10 @@
 using TransposedVectors
 using Base.Test
 
-# write your own tests here
-@test 1 == 2
+include("TransposedVector.jl")
+include("mul.jl")
+include("ldiv.jl")
+include("rdiv.jl")
+include("diagonal.jl")
+include("triangular.jl")
+include("sparse.jl")
