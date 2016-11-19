@@ -5,5 +5,5 @@
 
     @test (tv/mat)::TransposedVector ≈ [2/1  3/2  4/3]
 
-    @test_throws Exception d\tv
+    @test_throws Exception mat\tv
 end

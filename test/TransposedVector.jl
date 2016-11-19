@@ -6,6 +6,14 @@ end
     v = [1,2,3]
     z = [1+im,2,3]
 
+    @test TransposedVector(v) == [1 2 3]
+    @test TransposedVector{Int}(v) == [1 2 3]
+    @test size(TransposedVector{Int}(3)) === (1,3)
+    @test size(TransposedVector{Int}(1,3)) === (1,3)
+    @test size(TransposedVector{Int}((3,))) === (1,3)
+    @test size(TransposedVector{Int}((1,3))) === (1,3)
+    @test_throws Exception TransposedVector{Float64, Vector{Int}}(v)
+
     @test (v.')::TransposedVector == [1 2 3]
     @test (v')::TransposedVector == [1 2 3]
     @test (z.')::TransposedVector == [1+im 2 3]
@@ -39,6 +47,7 @@ end
 
     @test map(-, tv)::TransposedVector == [-1 -2 -3]
     @test (-).(tv)::TransposedVector == [-1 -2 -3]
+    @test (-).(tv,1)::TransposedVector == [0  1  2]
 
     @test AbstractVector(tv)::Vector{Int} == [1, 2, 3]
     @test Vector{Float64}(tv)::Vector{Float64} == [1, 2, 3]
