@@ -21,7 +21,6 @@
 @inline Base.A_mul_Bt(vec1::AbstractVector, vec2::AbstractVector) = kron(vec1, vec2.')
 @inline Base.A_mul_Bt(mat::AbstractMatrix, tvec::TransposedVector) = mat * tvec.vec
 
-#=
 @inline Base.At_mul_Bt(tvec::TransposedVector, vec::AbstractVector) = kron(tvec, vec)
 @inline Base.At_mul_Bt(tvec::TransposedVector, mat::AbstractMatrix) = error("Cannot left-multiply matrix by vector")
 @inline Base.At_mul_Bt(vec::AbstractVector, mat::AbstractMatrix) = TransposedVector(mat * vec)
@@ -39,6 +38,7 @@
 @inline Base.At_mul_B(vec1::AbstractVector, vec2::AbstractVector) = reduce(+, map(*, vec1, vec2))
 @inline Base.At_mul_B(mat::AbstractMatrix, tvec::TransposedVector) = error("Cannot right-multiply matrix by transposed vector")
 
+#=
 # Conjugated forms
 @inline Base.A_mul_Bc(::TransposedVector, ::AbstractVector) = error("Cannot multiply two transposed vectors")
 @inline Base.A_mul_Bc(tvec::TransposedVector, mat::AbstractMatrix) = TransposedVector(mat * conj(tvec.vec))

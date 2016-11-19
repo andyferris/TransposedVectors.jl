@@ -7,7 +7,8 @@
     @test_throws Exception d*tv
 
     @test (d*tv.')::Vector == [2,6,12]
-    
+
+    @test_throws Exception tv.'*d
 
     @test (tv/d)::TransposedVector ≈ [2/1  3/2  4/3]
 

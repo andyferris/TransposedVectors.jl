@@ -19,4 +19,20 @@
     @test (v*v.')::Matrix == [1 2 3; 2 4 6; 3 6 9]
     @test (mat*tv.')::Vector == [1,4,9]
 
+    @test (tv.'*v.')::Matrix == [1 2 3; 2 4 6; 3 6 9]
+    @test_throws Exception tv.'*mat.'
+    @test (v.'*mat.')::TransposedVector == [1 4 9]
+    @test_throws Exception tv.'*tv.'
+    @test v.'*tv.' === 14
+    @test_throws Exception v.'*v.'
+    @test (mat.'*tv.')::Vector == [1,4,9]
+
+    @test_throws Exception tv.'*v
+    @test_throws Exception tv.'*mat
+    @test (v.'*mat)::TransposedVector == [1 4 9]
+    @test (tv.'*tv)::Matrix == [1 2 3; 2 4 6; 3 6 9]
+    @test_throws Exception v.'*tv
+    @test v.'*v === 14
+    @test_throws Exception mat.'*tv
+
 end

@@ -4,7 +4,7 @@
 
 @inline Base.A_mul_Bt(d::Diagonal, tvec::TransposedVector) = d*tvec.vec
 
-
+@inline Base.At_mul_B(tvec::TransposedVector, d::Diagonal) = error("Cannot left-multiply matrix by vector")
 
 @inline Base.:(\)(::Diagonal, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
 @inline Base.:(\)(::Bidiagonal, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")

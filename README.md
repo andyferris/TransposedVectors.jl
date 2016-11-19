@@ -47,7 +47,7 @@ matrices *A* and transposed vectors **v**ᵀ, particularly the following list of
     conventions would make the first expression a vector, but never the second).
 
 For completeness: we also allow linear algebra objects to be scaled by a *scalar*
-and to be added to and subtracted from each other, if they are of the same type
+and to be added to and subtracted from each other, if they are of the same class
 and have the same dimensions. For complex matrices, we often replace the "ᵀ"
 with a conjugate transpose (Hermitian conjugate) "ᴴ" or superscipt "†". Some
 matrices are invertible, and even if not, matrix equations can be "solved"
@@ -62,10 +62,10 @@ difference in Julia 0.5 is:
 * **v**ᵀ**w** results in a vector, not a scalar
 * **v**ᵀ*A* gives a matrix (relates to the first point).
 
-At first, this might seem like a lot of programmer effort to address items 2 & 3 from
-the list above. However, combined with a matrix transpose view, we will be able
-to remove the `At_mul_Bt` class of methods entirely in the future, resulting in
-a equitable degree of simplification.
+At first, this might seem like a lot of programmer effort to address what to
+some will seem to be relatively minor gripes. However, combined with a matrix
+transpose view, we will be able to remove the `At_mul_Bt` class of methods
+entirely in the future, resulting in an equitable degree of simplification.
 
 Some other things I've observed about the linear algebra system:
 
