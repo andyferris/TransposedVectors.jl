@@ -13,5 +13,6 @@ include("rdiv.jl")
 include("diagonal.jl")
 include("triangular.jl")
 include("sparse.jl")
+include("qr.jl")
 
 end # module

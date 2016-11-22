@@ -10,6 +10,8 @@
 
     @test_throws Exception tv.'*d
 
+    @test (d*tv')::Vector == [2,6,12]
+
     @test (tv/d)::TransposedVector ≈ [2/1  3/2  4/3]
 
     @test_throws Exception d \ tv
