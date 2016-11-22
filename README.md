@@ -70,8 +70,8 @@ entirely in the future, resulting in an equitable degree of simplification.
 Some other things I've observed about the linear algebra system:
 
  * We are shoe-horning concepts of linear algebra into the `AbstractArray` interface.
-   The "simple" linear algebra I wrote of above has three objects: (row)
-   vectors, matrices, and transposed (column, dual or co-) vectors, yet we try
+   The "simple" linear algebra I wrote of above has three objects: (column)
+   vectors, matrices, and transposed (row, dual or co-) vectors, yet we try
    to map everything into two types: `AbstractArray{T,1}` and
    `AbstractArray{T,2}`.
  * Having vector spaces represented by `AbstractArray{T,1}` seems to disallow
