@@ -39,14 +39,22 @@
     cz = z'
     mat = diagm([1+im,2,3])
 
+    @test cz*z === 15 + 0im
+
     @test_throws Exception cz*z'
-    @test (cz*mat.')::TransposedVector == [2 4 9]
+    @test (cz*mat')::TransposedVector == [-2im 4 9]
     @test_throws Exception [1]*reshape([1],(1,1))' # no longer permitted
     @test cz*cz' === 15 + 0im
     @test_throws Exception z*vz'
     @test (z*z')::Matrix == [2 2+2im 3+3im; 2-2im 4 6; 3-3im 6 9]
     @test (mat*cz')::Vector == [2im,4,9]
 
+    @test (cz'*z')::Matrix == [2 2+2im 3+3im; 2-2im 4 6; 3-3im 6 9]
+    @test_throws Exception cz'*mat'
+    @test (z'*mat')::TransposedVector == [-2im 4 9]
+    @test_throws Exception cz'*cz'
+    @test z'*cz' === 15 + 0im
+    @test_throws Exception z'*z'
+    @test (mat'*cz')::Vector == [2,4,9]
 
-    @test cz*z == 15
 end
