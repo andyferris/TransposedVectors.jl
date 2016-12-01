@@ -33,7 +33,7 @@
 @inline Base.At_mul_B(tvec::TransposedVector, mat::AbstractMatrix) = error("Cannot left-multiply matrix by vector")
 @inline Base.At_mul_B(vec::AbstractVector, mat::AbstractMatrix) = TransposedVector(At_mul_B(mat,vec))
 @inline Base.At_mul_B(tvec1::TransposedVector, tvec2::TransposedVector) = kron(tvec1.vec, tvec2)
-@inline Base.At_mul_B(vec::AbstractVector, tvec::TransposedVector) = error("Cannot multiply two vectors")
+@inline Base.At_mul_B(vec::AbstractVector, tvec::TransposedVector) = error("Cannot multiply two transposed vectors")
 @inline Base.At_mul_B{T<:Real}(vec1::AbstractVector{T}, vec2::AbstractVector{T}) = reduce(+, map(*, vec1, vec2)) # Seems to be overloaded...
 @inline Base.At_mul_B(vec1::AbstractVector, vec2::AbstractVector) = reduce(+, map(*, vec1, vec2))
 @inline Base.At_mul_B(mat::AbstractMatrix, tvec::TransposedVector) = error("Cannot right-multiply matrix by transposed vector")
@@ -54,15 +54,16 @@
 @inline Base.Ac_mul_Bc(vec::AbstractVector, tvec::TransposedVector) = reduce(+, map(((a,b) -> conj(a * b)), vec, tvec.vec))
 @inline Base.Ac_mul_Bc(vec::AbstractVector, tvec::AbstractVector) = error("Cannot multiply two transposed vectors")
 @inline Base.Ac_mul_Bc(mat::AbstractMatrix, tvec::TransposedVector) = mat' * conj(tvec.vec)
-#=
+
+# TODO tests
 @inline Base.Ac_mul_B(::TransposedVector, ::AbstractVector) = error("Cannot multiply two vectors")
 @inline Base.Ac_mul_B(tvec::TransposedVector, mat::AbstractMatrix) = error("Cannot left-multiply matrix by vector")
 @inline Base.Ac_mul_B(vec::AbstractVector, mat::AbstractMatrix) = TransposedVector(conj(Ac_mul_B(mat,vec)))
 @inline Base.Ac_mul_B(tvec1::TransposedVector, tvec2::TransposedVector) = kron(conj(tvec1.vec), tvec2)
-@inline Base.Ac_mul_B(vec::AbstractVector, tvec::TransposedVector) = error("Cannot multiply two vectors")
+@inline Base.Ac_mul_B(vec::AbstractVector, tvec::TransposedVector) = error("Cannot multiply two transposed vectors")
 @inline Base.Ac_mul_B(vec1::AbstractVector, vec2::AbstractVector) = reduce(+, map(((a,b) -> conj(a) * b), vec1, vec2))
 @inline Base.Ac_mul_B(mat::AbstractMatrix, tvec::TransposedVector) = error("Cannot right-multiply matrix by transposed vector")
-
+#=
 #A_mul_B!
 #Ac_mul_B!
 #Ac_mul_B!
