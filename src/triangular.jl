@@ -31,3 +31,9 @@
 
 @inline Base.:(\)(::Union{UpperTriangular,LowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
 @inline Base.:(\)(::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
+
+@inline Base.At_ldiv_B(::Union{UpperTriangular,LowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
+@inline Base.At_ldiv_B(::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
+
+@inline Base.Ac_ldiv_B(::Union{UpperTriangular,LowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
+@inline Base.Ac_ldiv_B(::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")

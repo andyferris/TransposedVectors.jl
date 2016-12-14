@@ -13,3 +13,9 @@
 @inline Base.:(\)(::Diagonal, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
 @inline Base.:(\)(::Bidiagonal, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
 @inline Base.:(\){TA<:Number,TB<:Number}(::Bidiagonal{TA}, ::TransposedVector{TB}) = error("Cannot left-divide matrix by transposed vector")
+
+@inline Base.At_ldiv_B(::Bidiagonal, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
+@inline Base.At_ldiv_B{TA<:Number,TB<:Number}(::Bidiagonal{TA}, ::TransposedVector{TB}) = error("Cannot left-divide matrix by transposed vector")
+
+@inline Base.Ac_ldiv_B(::Bidiagonal, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
+@inline Base.Ac_ldiv_B{TA<:Number,TB<:Number}(::Bidiagonal{TA}, ::TransposedVector{TB}) = error("Cannot left-divide matrix by transposed vector")
