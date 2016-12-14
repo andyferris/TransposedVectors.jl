@@ -10,7 +10,7 @@
 
 This package prototypes some ideas for [taking vector transposes seriously](https://github.com/JuliaLang/julia/issues/4774)
 which are backward-compatible with Julia v0.5. The idea is to wrap the
-transposition of a vector in a `TransposedVector` type, where `TransposedVector{T} <: Matrix{T}`.
+transposition of a vector in a `TransposedVector` type, where `TransposedVector{T} <: Array{T,2}`.
 
 The transposed vector follows a similar semantic to previously, in that it
 remains a 1-by-*N* sized array. However, the fact that the first dimension is
@@ -43,8 +43,7 @@ matrices *A* and transposed vectors **v**ᵀ, particularly the following list of
   * Matrix—vector multiplication, *A***v**, giving a vector.
   * Transposed-vector—matrix multiplication, **v**ᵀ*A*, giving a transposed vector.
   * Matrix-matrix multiplication, *A**B*, resulting in a matrix.
-  * Outer product **v**⊗**w**, or **vw**ᵀ, resulting in a matrix (some
-    conventions would make the first expression a vector, but never the second).
+  * Outer product **vw**ᵀ, resulting in a matrix.
 
 For completeness: we also allow linear algebra objects to be scaled by a *scalar*
 and to be added to and subtracted from each other, if they are of the same class
