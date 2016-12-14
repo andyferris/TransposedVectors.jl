@@ -4,4 +4,12 @@
     tv = v.'
 
     @test (tv/mat)::TransposedVector ≈ [2/1  3/2  4/3]
+
+    @test (v.'/mat)::TransposedVector ≈ [2/1  3/2  4/3]
+    @test (v.'/mat.')::TransposedVector ≈ [2/1  3/2  4/3]
+    @test (tv/mat.')::TransposedVector ≈ [2/1  3/2  4/3]
+
+    @test (v'/mat)::TransposedVector ≈ [2/1  3/2  4/3]
+    @test (v'/mat')::TransposedVector ≈ [2/1  3/2  4/3]
+    @test (tv/mat')::TransposedVector ≈ [2/1  3/2  4/3]
 end

@@ -20,9 +20,14 @@
 @inline Base.Ac_mul_B(mat::Base.LinAlg.AbstractTriangular, tvec::TransposedVector) = error("Cannot right-multiply matrix by transposed vector")
 @inline Base.Ac_mul_B(tvec::TransposedVector, mat::Base.LinAlg.AbstractTriangular) = error("Cannot left-multiply matrix by vector")
 
-
 @inline Base.:(/)(tvec::TransposedVector, tri::Union{UpperTriangular,LowerTriangular}) = TransposedVector(tri \ tvec.vec)
 @inline Base.:(/)(tvec::TransposedVector, tri::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}) = TransposedVector(tri \ tvec.vec)
+
+@inline Base.:A_rdiv_Bt(tvec::TransposedVector, tri::Union{UpperTriangular,LowerTriangular}) = TransposedVector(tri.' \ tvec.vec)
+@inline Base.:A_rdiv_Bt(tvec::TransposedVector, tri::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}) = TransposedVector(tri.' \ tvec.vec)
+
+@inline Base.:A_rdiv_Bc(tvec::TransposedVector, tri::Union{UpperTriangular,LowerTriangular}) = TransposedVector(tri' \ tvec.vec)
+@inline Base.:A_rdiv_Bc(tvec::TransposedVector, tri::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}) = TransposedVector(tri' \ tvec.vec)
 
 @inline Base.:(\)(::Union{UpperTriangular,LowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
 @inline Base.:(\)(::Union{Base.LinAlg.UnitUpperTriangular,Base.LinAlg.UnitLowerTriangular}, ::TransposedVector) = error("Cannot left-divide matrix by transposed vector")
