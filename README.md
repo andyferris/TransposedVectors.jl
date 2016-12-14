@@ -24,7 +24,9 @@ linear (i.e. matrix and vector) algebra:
 * A vector times a transposed vector becomes a matrix (outer product)
 * We can perform right division of a transposed vector and a matrix
 
-There are a few other refinements, and work is in progress.
+There are a few other refinements, such as defining `norm` on transposed vectors,
+and disallowing strange `vector*matrix` operations for `1xn` matrices (one can
+now use `TransposedVector` for that).
 
 ## Discussion
 
