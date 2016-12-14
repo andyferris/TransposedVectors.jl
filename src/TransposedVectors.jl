@@ -1,6 +1,6 @@
 module TransposedVectors
 
-import Base: transpose, ctranspose, conj, size, length, similar
+import Base: transpose, ctranspose, conj, size, length, similar, norm
 
 import Base: @propagate_inbounds
 
@@ -14,5 +14,6 @@ include("diagonal.jl")
 include("triangular.jl")
 include("sparse.jl")
 include("qr.jl")
+include("norm.jl")
 
 end # module
