@@ -47,6 +47,21 @@ Base.linearindexing{V<:TransposedVector}(::Union{V,Type{V}}) = Base.LinearFast()
 @propagate_inbounds Base.getindex(vec::TransposedVector, i) = vec.vec[i]
 @propagate_inbounds Base.setindex!(vec::TransposedVector, v, i) = setindex!(vec.vec, v, i)
 
+# Cartesian indexing is distorted by getindex
+@inline function Base.getindex(tvec::TransposedVector, i::CartesianIndex{2}) # TODO generalize to arbitrary dimension CartesianIndex
+    @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1])
+        throw(BoundsError(tvec, i.I))
+    end
+    @inbounds return tvec.vec[i.I[2]]
+end
+@inline function Base.setindex!(tvec::TransposedVector, v, i::CartesianIndex{2})
+    @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1])
+        throw(BoundsError(tvec, i.I))
+    end
+    @inbounds tvec.vec[i.I[2]] = v
+end
+
+
 # Some conversions
 Base.convert(::Type{AbstractVector}, tvec::TransposedVector) = tvec.vec
 Base.convert{V<:AbstractVector}(::Type{V}, tvec::TransposedVector) = convert(V,tvec.vec)

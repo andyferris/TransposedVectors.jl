@@ -52,4 +52,7 @@ end
     @test AbstractVector(tv)::Vector{Int} == [1, 2, 3]
     @test Vector{Float64}(tv)::Vector{Float64} == [1, 2, 3]
     @test TransposedVector{Float64,Vector{Float64}}(tv)::TransposedVector{Float64} == [1.0  2.0  3.0]
+
+    y = rand(Complex{Float64},3)
+    @test sumabs2(imag.(diag(y .+ y'))) < 1e-20
 end
