@@ -57,14 +57,6 @@
     @test_throws Exception z'*z'
     @test (mat'*cz')::Vector == [2,4,9]
 
-    @inline Base.Ac_mul_B(::TransposedVector, ::AbstractVector) = error("Cannot multiply two vectors")
-    @inline Base.Ac_mul_B(tvec::TransposedVector, mat::AbstractMatrix) = error("Cannot left-multiply matrix by vector")
-    @inline Base.Ac_mul_B(vec::AbstractVector, mat::AbstractMatrix) = TransposedVector(conj(Ac_mul_B(mat,vec)))
-    @inline Base.Ac_mul_B(tvec1::TransposedVector, tvec2::TransposedVector) = kron(conj(tvec1.vec), tvec2)
-    @inline Base.Ac_mul_B(vec::AbstractVector, tvec::TransposedVector) = error("Cannot multiply two transposed vectors")
-    @inline Base.Ac_mul_B(vec1::AbstractVector, vec2::AbstractVector) = reduce(+, map(((a,b) -> conj(a) * b), vec1, vec2))
-    @inline Base.Ac_mul_B(mat::AbstractMatrix, tvec::TransposedVector) = error("Cannot right-multiply matrix by transposed vector")
-
     @test_throws Exception cz'*z
     @test_throws Exception cz'*mat
     @test (z'*mat)::TransposedVector == [2 4 9]

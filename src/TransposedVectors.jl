@@ -1,6 +1,6 @@
 module TransposedVectors
 
-import Base: transpose, ctranspose, conj, size, length, similar, norm
+import Base: transpose, ctranspose, conj, size, length, similar, norm, getindex, setindex!
 
 import Base: @propagate_inbounds
 

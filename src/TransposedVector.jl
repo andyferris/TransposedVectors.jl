@@ -51,23 +51,32 @@ check_types(T,v) = error("Element type mismatch. Tried to create a `TransposedVe
 @inline size(tvec::TransposedVector, d) = ifelse(d==2, length(tvec.vec), 1)
 Base.linearindexing{V<:TransposedVector}(::Union{V,Type{V}}) = Base.LinearFast()
 
-@propagate_inbounds Base.getindex(tvec::TransposedVector, i) = transpose(tvec.vec[i])
-@propagate_inbounds Base.setindex!(tvec::TransposedVector, v, i) = setindex!(tvec.vec, transpose(v), i)
+@propagate_inbounds getindex(tvec::TransposedVector, i) = transpose(tvec.vec[i])
+@propagate_inbounds setindex!(tvec::TransposedVector, v, i) = setindex!(tvec.vec, transpose(v), i)
 
 # Cartesian indexing is distorted by getindex
-@inline function Base.getindex(tvec::TransposedVector, i::CartesianIndex{2}) # TODO generalize to arbitrary dimension CartesianIndex
-    @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1])
+# Furthermore, Cartesian indexes don't have to match shape, apparently!
+@inline function getindex(tvec::TransposedVector, i::CartesianIndex)
+    @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1] && check_tail_indices(i.I...))
         throw(BoundsError(tvec, i.I))
     end
     @inbounds return transpose(tvec.vec[i.I[2]])
 end
-@inline function Base.setindex!(tvec::TransposedVector, v, i::CartesianIndex{2})
-    @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1])
+@inline function setindex!(tvec::TransposedVector, v, i::CartesianIndex)
+    @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1] && check_tail_indices(i.I...))
         throw(BoundsError(tvec, i.I))
     end
     @inbounds tvec.vec[i.I[2]] = transpose(v)
 end
 
+@propagate_inbounds getindex(tvec::TransposedVector, ::CartesianIndex{0}) = getindex(tvec)
+@propagate_inbounds getindex(tvec::TransposedVector, i::CartesianIndex{1}) = getindex(tvec, i.I[1])
+
+@propagate_inbounds setindex!(tvec::TransposedVector, v, ::CartesianIndex{0}) = setindex!(tvec, v)
+@propagate_inbounds setindex!(tvec::TransposedVector, v, i::CartesianIndex{1}) = setindex!(tvec, v, i.I[1])
+
+@inline check_tail_indices(i1, i2) = true
+@inline check_tail_indices(i1, i2, i3, is...) = i3 == 1 ? check_tail_indices(i1, i2, is...) :  false
 
 # Some conversions
 Base.convert(::Type{AbstractVector}, tvec::TransposedVector) = tvec.vec
