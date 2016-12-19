@@ -39,36 +39,36 @@ check_types(T,v) = error("Element type mismatch. Tried to create a `TransposedVe
 @inline conj{T<:Real}(tvec::TransposedVector{T}) = tvec
 
 # AbstractArray interface
-@inline length(vec::TransposedVector) =  length(vec.vec)
-@inline size(vec::TransposedVector) = (1, length(vec.vec))
-@inline size(vec::TransposedVector,d) = ifelse(d==2, length(vec.vec), 1)
+@inline length(tvec::TransposedVector) =  length(tvec.vec)
+@inline size(tvec::TransposedVector) = (1, length(tvec.vec))
+@inline size(tvec::TransposedVector, d) = ifelse(d==2, length(tvec.vec), 1)
 Base.linearindexing{V<:TransposedVector}(::Union{V,Type{V}}) = Base.LinearFast()
 
-@propagate_inbounds Base.getindex(vec::TransposedVector, i) = vec.vec[i]
-@propagate_inbounds Base.setindex!(vec::TransposedVector, v, i) = setindex!(vec.vec, v, i)
+@propagate_inbounds Base.getindex(tvec::TransposedVector, i) = transpose(tvec.vec[i])
+@propagate_inbounds Base.setindex!(tvec::TransposedVector, v, i) = setindex!(tvec.vec, transpose(v), i)
 
 # Cartesian indexing is distorted by getindex
 @inline function Base.getindex(tvec::TransposedVector, i::CartesianIndex{2}) # TODO generalize to arbitrary dimension CartesianIndex
     @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1])
         throw(BoundsError(tvec, i.I))
     end
-    @inbounds return tvec.vec[i.I[2]]
+    @inbounds return transpose(tvec.vec[i.I[2]])
 end
 @inline function Base.setindex!(tvec::TransposedVector, v, i::CartesianIndex{2})
     @boundscheck if !(i.I[1] == 1 && i.I[2] ∈ indices(tvec.vec)[1])
         throw(BoundsError(tvec, i.I))
     end
-    @inbounds tvec.vec[i.I[2]] = v
+    @inbounds tvec.vec[i.I[2]] = transpose(v)
 end
 
 
 # Some conversions
 Base.convert(::Type{AbstractVector}, tvec::TransposedVector) = tvec.vec
-Base.convert{V<:AbstractVector}(::Type{V}, tvec::TransposedVector) = convert(V,tvec.vec)
+Base.convert{V<:AbstractVector}(::Type{V}, tvec::TransposedVector) = convert(V, tvec.vec)
 Base.convert{T,V}(::Type{TransposedVector{T,V}}, tvec::TransposedVector) = TransposedVector(convert(V, tvec.vec))
 
 # helper function for below
-@inline to_vec(tvec::TransposedVector) = tvec.vec
+@inline to_vec(tvec::TransposedVector) = transpose(tvec)
 @inline to_vec(x::Number) = x
 @inline to_vecs(tvecs...) = (map(to_vec, tvecs)...)
 

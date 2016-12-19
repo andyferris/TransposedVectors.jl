@@ -21,6 +21,9 @@
     @test_throws Exception tv'*ut'
     @test (ut'*tv')::Vector == [2,6,12]
 
+    @test_throws Exception ut'*tv
+    @test_throws Exception tv'*ut
+
     @test (tv/ut)::TransposedVector ≈ [2/1  3/2  4/3]
     @test (tv/ut.')::TransposedVector ≈ [2/1  3/2  4/3]
     @test (tv/ut')::TransposedVector ≈ [2/1  3/2  4/3]

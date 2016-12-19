@@ -1,12 +1,12 @@
 # Methods to resolve ambiguities with `Diagonal`
-@inline Base.:(*)(tvec::TransposedVector, diagonal::Diagonal) = TransposedVector(diagonal * tvec.vec)
+@inline Base.:(*)(tvec::TransposedVector, diagonal::Diagonal) = transpose(diagonal * transpose(tvec))
 @inline Base.:(*)(::Diagonal, ::TransposedVector) = error("Cannot right-multiply matrix by transposed vector")
 
-@inline Base.A_mul_Bt(d::Diagonal, tvec::TransposedVector) = d*tvec.vec
+@inline Base.A_mul_Bt(d::Diagonal, tvec::TransposedVector) = d*transpose(tvec)
 
 @inline Base.At_mul_B(tvec::TransposedVector, d::Diagonal) = error("Cannot left-multiply matrix by vector")
 
-@inline Base.A_mul_Bc(d::Diagonal, tvec::TransposedVector) = d*conj(tvec.vec)
+@inline Base.A_mul_Bc(d::Diagonal, tvec::TransposedVector) = d*ctranspose(tvec)
 
 @inline Base.Ac_mul_B(tvec::TransposedVector, d::Diagonal) = error("Cannot left-multiply matrix by vector")
 

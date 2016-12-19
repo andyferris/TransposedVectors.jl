@@ -1,4 +1,4 @@
-@inline norm{T}(tv::TransposedVector{T}) = norm(tv.vec)
+@inline norm{T}(tv::TransposedVector{T}) = norm(transpose(tv))
 
 """
     norm(transposed_vector, [q = 2])
@@ -10,4 +10,4 @@ The difference in norm between a vector space and its dual arrises to preserve
 the relationship between duality and the inner product, and the result is
 consistent with the p-norm of `1 × n` matrix.
 """
-@inline norm{T}(tv::TransposedVector{T}, q::Real) = q == Inf ? norm(tv.vec, 1) : norm(tv.vec, q/(1-q))
+@inline norm{T}(tv::TransposedVector{T}, q::Real) = q == Inf ? norm(transpose(tv), 1) : norm(transpose(tv), q/(1-q))
