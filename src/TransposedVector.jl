@@ -33,6 +33,13 @@ check_types(T,v) = error("Element type mismatch. Tried to create a `TransposedVe
 @inline ctranspose{T}(tvec::TransposedVector{T}) = conj(tvec.vec)
 @inline ctranspose{T<:Real}(tvec::TransposedVector{T}) = tvec.vec
 
+# Some overloads from Base
+@inline transpose(r::Range) = TransposedVector(r)
+@inline transpose(bv::BitVector) = TransposedVector(r)
+
+@inline ctranspose(r::Range) = TransposedVector(conj(r)) # is there such a thing as a complex range?
+@inline ctranspose(bv::BitVector) = TransposedVector(bv)
+
 # Strictly, these are unnecessary but will make things stabler if we introduce
 # a "view" for conj(::AbstractArray)
 @inline conj(tvec::TransposedVector) = TransposedVector(conj(tvec.vec))
