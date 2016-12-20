@@ -1,1 +1,1 @@
-@inline Base.A_mul_Bc(tvec::TransposedVector, B::Union{Base.LinAlg.QRCompactWYQ,Base.LinAlg.QRPackedQ}) = ctranspose(B*ctranspose(tvec))
+@inline A_mul_Bc(tvec::TransposedVector, B::Union{LinAlg.QRCompactWYQ,LinAlg.QRPackedQ}) = ctranspose(B*ctranspose(tvec))

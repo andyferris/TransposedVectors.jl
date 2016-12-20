@@ -1,10 +1,16 @@
 module TransposedVectors
 
-import Base: transpose, ctranspose, conj, size, length, similar, norm, getindex, setindex!
+import Base: transpose, ctranspose, conj, size, length, similar, norm, getindex,
+       setindex!, convert, map, broadcast, linearindexing, LinearFast, promote_op,
+       LinAlg, SparseArrays
 
-import Base: @propagate_inbounds
+import Base: *, A_mul_Bt, At_mul_B, At_mul_Bt, A_mul_Bc, Ac_mul_B, Ac_mul_Bc
+import Base: /, A_rdiv_Bt, At_rdiv_B, At_rdiv_Bt, A_rdiv_Bc, Ac_rdiv_B, Ac_rdiv_Bc
+import Base: \, A_ldiv_Bt, At_ldiv_B, At_ldiv_Bt, A_ldiv_Bc, Ac_ldiv_B, Ac_ldiv_Bc
 
-export TransposedVector
+import Base: @propagate_inbounds, @pure
+
+export TransposedVector, transpose_type
 
 include("TransposedVector.jl")
 include("mul.jl")

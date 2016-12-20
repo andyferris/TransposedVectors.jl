@@ -6,22 +6,24 @@ immutable TransposedVector{T,V<:AbstractVector} <: AbstractMatrix{T}
     end
 end
 
-check_types{T}(::Type{T},::AbstractVector{T}) = nothing
-check_types(T,v) = error("Element type mismatch. Tried to create a `TransposedVector{$T}` from a $(typeof(v))")
+@pure check_types{T1,T2}(::Type{T1},::AbstractVector{T2}) = transpose_type(T1) === transpose_type(T2) ? nothing : error("Element type mismatch. Tried to create a `TransposedVector{$T}` from a $(typeof(v))")
+
+# The element type is transformed as transpose is recursive
+@inline transpose_type{T}(::Type{T}) = promote_op(transpose, T)
 
 # Constructors that take a vector
-@inline TransposedVector{T}(vec::AbstractVector{T}) = TransposedVector{T,typeof(vec)}(vec)
+@inline TransposedVector{T}(vec::AbstractVector{T}) = TransposedVector{transpose_type(T),typeof(vec)}(vec)
 @inline (::Type{TransposedVector{T}}){T}(vec::AbstractVector{T}) = TransposedVector{T,typeof(vec)}(vec)
 
 # Constructors that take a size and default to Array
-@inline (::Type{TransposedVector{T}}){T}(n::Int) = TransposedVector{T}(Vector{T}(n))
-@inline (::Type{TransposedVector{T}}){T}(n1::Int, n2::Int) = n1 == 1 ? TransposedVector{T}(Vector{T}(n2)) : error("TransposedVector expects 1×N size, got ($n1,$n2)")
-@inline (::Type{TransposedVector{T}}){T}(n::Tuple{Int}) = TransposedVector{T}(Vector{T}(n[1]))
-@inline (::Type{TransposedVector{T}}){T}(n::Tuple{Int,Int}) = n[1] == 1 ? TransposedVector{T}(Vector{T}(n[2])) : error("TransposedVector expects 1×N size, got $n")
+@inline (::Type{TransposedVector{T}}){T}(n::Int) = TransposedVector{T}(Vector{transpose_type(T)}(n))
+@inline (::Type{TransposedVector{T}}){T}(n1::Int, n2::Int) = n1 == 1 ? TransposedVector{T}(Vector{transpose_type(T)}(n2)) : error("TransposedVector expects 1×N size, got ($n1,$n2)")
+@inline (::Type{TransposedVector{T}}){T}(n::Tuple{Int}) = TransposedVector{T}(Vector{transpose_type(T)}(n[1]))
+@inline (::Type{TransposedVector{T}}){T}(n::Tuple{Int,Int}) = n[1] == 1 ? TransposedVector{T}(Vector{transpose_type(T)}(n[2])) : error("TransposedVector expects 1×N size, got $n")
 
 # similar()
 @inline similar(tvec::TransposedVector) = TransposedVector(similar(tvec.vec))
-@inline similar{T}(tvec::TransposedVector, ::Type{T}) = TransposedVector(similar(tvec.vec, T))
+@inline similar{T}(tvec::TransposedVector, ::Type{T}) = TransposedVector(similar(tvec.vec, transpose_type(T)))
 # There is no resizing similar() because it would be ambiguous if the result were a Matrix or a TransposedVector
 
 # Basic methods
@@ -51,7 +53,7 @@ check_types(T,v) = error("Element type mismatch. Tried to create a `TransposedVe
 @inline length(tvec::TransposedVector) =  length(tvec.vec)
 @inline size(tvec::TransposedVector) = (1, length(tvec.vec))
 @inline size(tvec::TransposedVector, d) = ifelse(d==2, length(tvec.vec), 1)
-Base.linearindexing{V<:TransposedVector}(::Union{V,Type{V}}) = Base.LinearFast()
+linearindexing{V<:TransposedVector}(::Union{V,Type{V}}) = LinearFast()
 
 @propagate_inbounds getindex(tvec::TransposedVector, i) = transpose(tvec.vec[i])
 @propagate_inbounds setindex!(tvec::TransposedVector, v, i) = setindex!(tvec.vec, transpose(v), i)
@@ -81,9 +83,9 @@ end
 @inline check_tail_indices(i1, i2, i3, is...) = i3 == 1 ? check_tail_indices(i1, i2, is...) :  false
 
 # Some conversions
-Base.convert(::Type{AbstractVector}, tvec::TransposedVector) = tvec.vec
-Base.convert{V<:AbstractVector}(::Type{V}, tvec::TransposedVector) = convert(V, tvec.vec)
-Base.convert{T,V}(::Type{TransposedVector{T,V}}, tvec::TransposedVector) = TransposedVector(convert(V, tvec.vec))
+convert(::Type{AbstractVector}, tvec::TransposedVector) = tvec.vec
+convert{V<:AbstractVector}(::Type{V}, tvec::TransposedVector) = convert(V, tvec.vec)
+convert{T,V}(::Type{TransposedVector{T,V}}, tvec::TransposedVector) = TransposedVector(convert(V, tvec.vec))
 
 # helper function for below
 @inline to_vec(tvec::TransposedVector) = transpose(tvec)
@@ -91,8 +93,8 @@ Base.convert{T,V}(::Type{TransposedVector{T,V}}, tvec::TransposedVector) = Trans
 @inline to_vecs(tvecs...) = (map(to_vec, tvecs)...)
 
 # map
-@inline Base.map(f, tvecs::TransposedVector...) = TransposedVector(map(f, to_vecs(tvecs...)...))
+@inline map(f, tvecs::TransposedVector...) = TransposedVector(map(f, to_vecs(tvecs...)...))
 
 # broacast
-@inline Base.broadcast(f, tvecs::Union{Number,TransposedVector}...) = TransposedVector(broadcast(f, to_vecs(tvecs...)...))
+@inline broadcast(f, tvecs::Union{Number,TransposedVector}...) = TransposedVector(broadcast(f, to_vecs(tvecs...)...))
 # Other combinations default to Array...
