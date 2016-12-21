@@ -2,6 +2,7 @@ using TransposedVectors
 using Base.Test
 
 include("TransposedVector.jl")
+include("hcat.jl")
 include("mul.jl")
 include("ldiv.jl")
 include("rdiv.jl")
